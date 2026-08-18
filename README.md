@@ -157,23 +157,6 @@ Final Migrated Code
 
 ---
 
-## ✨ Key Features
-
-* 🤖 Multi-agent architecture
-* 🔍 Static analysis of legacy source code
-* 🌳 AST-based code analysis
-* 🧠 LLM-powered code migration
-* 🔄 Automated correction and retry workflow
-* ✅ Syntax and compilation validation
-* ▶️ Runtime execution verification
-* 📊 Output correctness checking
-* 📝 Before-and-after code comparison
-* 🔎 Code diff visualization
-* 🖥️ Streamlit-based user interface
-* 🧩 Modular agent architecture
-
----
-
 ## 📊 Current Results
 
 The framework is currently operational across the complete migration pipeline.
@@ -318,34 +301,23 @@ These results demonstrate the framework's ability to combine agent-based analysi
 | Execution Validation | Python Runtime        |
 
 ---
+## ✨ Key Features
 
-## 🧩 Agent Architecture
-
-```text
-                    ┌─────────────────┐
-                    │   Orchestrator  │
-                    └────────┬────────┘
-                             │
-          ┌──────────────────┼──────────────────┐
-          │                  │                  │
-          ▼                  ▼                  ▼
-   ┌─────────────┐    ┌─────────────┐    ┌─────────────┐
-   │  Analysis   │    │  Migration  │    │Verification │
-   │    Agent    │───▶│    Agent    │───▶│    Agent    │
-   └─────────────┘    └─────────────┘    └──────┬──────┘
-                                                 │
-                                                 │
-                                      ┌──────────▼──────────┐
-                                      │ Verification Result │
-                                      └──────────┬──────────┘
-                                                 │
-                                      Failed ─────┘
-                                                 │
-                                                 ▼
-                                         Migration Retry
-```
+* 🤖 Multi-agent architecture
+* 🔍 Static analysis of legacy source code
+* 🌳 AST-based code analysis
+* 🧠 LLM-powered code migration
+* 🔄 Automated correction and retry workflow
+* ✅ Syntax and compilation validation
+* ▶️ Runtime execution verification
+* 📊 Output correctness checking
+* 📝 Before-and-after code comparison
+* 🔎 Code diff visualization
+* 🖥️ Streamlit-based user interface
+* 🧩 Modular agent architecture
 
 ---
+
 
 ## 📁 Project Structure
 
@@ -369,32 +341,6 @@ Agentic-Code-Migration-Framework/
 ```
 
 > The project structure may evolve as additional modules and experiments are added.
-
----
-
-## 🖥️ User Interface
-
-The framework includes a Streamlit interface that allows users to:
-
-1. Upload legacy source code.
-2. Start the migration process.
-3. View static-analysis results.
-4. View the generated modern code.
-5. Inspect verification results.
-6. Review migration logs.
-7. Compare the original and migrated implementations.
-
----
-
-## 🔬 Research Direction
-
-The framework is designed around the idea that **LLM-based code generation should be grounded by program analysis and automated verification**.
-
-The research direction focuses on combining:
-
-**Static Analysis + LLM Agents + Automated Verification**
-
-rather than treating code migration as a single-shot generation task.
 
 ---
 
@@ -429,14 +375,3 @@ Computer Science Engineering — Artificial Intelligence & Machine Learning
 
 ---
 
-## ⭐ Project Vision
-
-> **Make legacy software modernization more intelligent, automated, verifiable, and reliable through agentic AI.**
-
----
-
-## 📌 Project Status
-
-🟢 **Active Development**
-
-The core agentic migration pipeline and interactive interface are operational. Further benchmarking, optimization, and research evaluation are in progress.
