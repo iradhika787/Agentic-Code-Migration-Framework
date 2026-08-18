@@ -215,6 +215,93 @@ The framework is currently operational across the complete migration pipeline.
 
 > **Note:** The current results represent the development-stage evaluation of the framework. Detailed benchmark metrics and comparative experiments will be added as the evaluation is finalized.
 
+## 📸 Results and Screenshots
+
+The following screenshots demonstrate the working interface and end-to-end execution of the Agentic Code Migration Framework, covering legacy Python code upload, analysis, migration, verification, and successful execution.
+
+### 1. Legacy Python Code Upload Interface
+
+![Legacy Python Code Upload Interface](screenshots/01-upload-interface.png)
+
+**Figure 1: Migration Control Interface**
+
+The application provides an interface for uploading legacy Python source files. Users can optionally provide the expected program output and start the automated migration workflow using the **Run Migration** button. The workflow is coordinated through the framework's orchestration layer.
+
+---
+
+### 2. Python Migration Studio Dashboard
+
+![Python Migration Studio Dashboard](screenshots/02-migration-studio.png)
+
+**Figure 2: Python Migration Studio**
+
+The migration studio provides a centralized view of the migration process. It displays the uploaded file, detected issues, migration attempts, workflow status, input and output sections, analysis results, verification information, and workflow logs.
+
+---
+
+### 3. Legacy Python Test Input Files
+
+![Legacy Python Test Files](screenshots/03-test-input-files.png)
+
+**Figure 3: Legacy Python Test Files**
+
+Multiple Python source files are used as test inputs for evaluating the migration framework. These examples provide legacy-code inputs for testing the analysis, migration, and verification stages.
+
+---
+
+### 4. Legacy Python File Uploaded
+
+![Legacy Python File Uploaded](screenshots/04-file-uploaded.png)
+
+**Figure 4: Uploaded Legacy Python Source File**
+
+The `example1.py` legacy Python source file is uploaded to the migration studio and is ready to be processed by the automated analysis, migration, and verification workflow.
+
+---
+
+### 5. Successful Migration and Verification
+
+![Successful Migration and Verification](screenshots/05-migration-success.png)
+
+**Figure 5: Successful End-to-End Migration Result**
+
+The final screenshot demonstrates successful execution of the complete migration workflow. The framework identifies legacy Python constructs during analysis, performs code migration, and verifies the generated program.
+
+The result shows:
+
+* **Status:** Success
+* **Attempts:** 1
+* **Issues detected during analysis:** 3
+* **Syntax validation:** Passed
+* **Compilation:** Passed
+* **Runtime execution:** Passed
+* **Output matching:** Passed
+* **Migration:** Completed successfully
+
+The **Analysis** panel reports the detected legacy constructs. The **Verification** panel confirms syntax, compilation, runtime, and output checks. The **Logs Panel** provides execution traceability across the workflow agents.
+
+### 🔄 End-to-End Migration Workflow
+
+```text
+Legacy Python Code
+        ↓
+File Upload
+        ↓
+Static Analysis
+        ↓
+Code Migration
+        ↓
+Verification
+        ↓
+Runtime Execution
+        ↓
+Output Validation
+        ↓
+Successful Migration
+```
+
+These results demonstrate the framework's ability to combine agent-based analysis, automated code migration, verification, and orchestration into a unified legacy-code modernization workflow.
+
 ---
 
 ## 🛠️ Technology Stack
