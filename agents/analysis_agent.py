@@ -23,6 +23,7 @@ class AnalysisAgent:
             if not stripped or stripped.startswith("#"):
                 continue
 
+            # Check for dict.has_key()
             if re.search(r"\.has_key\s*\(", line):
                 issues.append(
                     {
@@ -32,7 +33,9 @@ class AnalysisAgent:
                     }
                 )
 
-            if re.search(r"print\s*>>|print\s+\S+\s*,", line):
+            # Check for Python 2 print statement (more comprehensive)
+            # Pattern: print followed by space but NOT '(' - catches both print >> and print expr
+            if self._is_print_statement(line):
                 issues.append(
                     {
                         "line": line_number,
@@ -41,6 +44,7 @@ class AnalysisAgent:
                     }
                 )
 
+            # Check for old raise syntax (raise Exception, message)
             if re.search(r"raise\s+[^\n,]+\s*,\s*.*$", line):
                 issues.append(
                     {
@@ -50,24 +54,26 @@ class AnalysisAgent:
                     }
                 )
 
-            if re.search(r"(?<![A-Za-z0-9_])\d+\s*/\s*\d+", line) or re.search(r"\b(?:xrange|map|filter|zip)\s*\(", line):
-                if re.search(r"(?<![A-Za-z0-9_])\d+\s*/\s*\d+", line):
-                    issues.append(
-                        {
-                            "line": line_number,
-                            "type": "division_semantics_risk",
-                            "detail": self.issue_types["division_semantics_risk"],
-                        }
-                    )
-                if re.search(r"\b(?:xrange|map|filter|zip)\s*\(", line):
-                    issues.append(
-                        {
-                            "line": line_number,
-                            "type": "iterator_semantics_risk",
-                            "detail": self.issue_types["iterator_semantics_risk"],
-                        }
-                    )
+            # Check for division semantics and iterator functions
+            if re.search(r"(?<![A-Za-z0-9_])\d+\s*/\s*\d+", line):
+                issues.append(
+                    {
+                        "line": line_number,
+                        "type": "division_semantics_risk",
+                        "detail": self.issue_types["division_semantics_risk"],
+                    }
+                )
+            
+            if re.search(r"\b(?:xrange|map|filter|zip)\s*\(", line):
+                issues.append(
+                    {
+                        "line": line_number,
+                        "type": "iterator_semantics_risk",
+                        "detail": self.issue_types["iterator_semantics_risk"],
+                    }
+                )
 
+            # Check for backtick repr
             if "`" in line:
                 issues.append(
                     {
@@ -77,6 +83,7 @@ class AnalysisAgent:
                     }
                 )
 
+            # Check for <> operator
             if "<>" in line:
                 issues.append(
                     {
@@ -87,3 +94,45 @@ class AnalysisAgent:
                 )
 
         return issues
+
+    def _is_print_statement(self, line: str) -> bool:
+        """
+        Detect Python 2 print statements.
+        Returns True if the line contains a print statement (not a function call).
+        
+        Patterns to catch:
+        - print "something"
+        - print var
+        - print expr >> file
+        - print expr,  (with trailing comma)
+        """
+        # Check if line contains 'print' keyword
+        if not re.search(r"\bprint\b", line):
+            return False
+        
+        # If print is followed by '(', it's likely a function call (Python 3 style or function named print)
+        # But we need to be careful - it could still be a print statement with parenthesized expression
+        # Let's check for patterns that are definitively Python 2
+        
+        # Pattern 1: print >> (print redirect)
+        if re.search(r"\bprint\s*>>", line):
+            return True
+        
+        # Pattern 2: print "..." or print '...' without parentheses
+        # Look for print followed by a space and a quote, without '(' before the quote
+        if re.search(r"\bprint\s+['\"]", line):
+            return True
+        
+        # Pattern 3: print var or print expr with comma at end (print expr,)
+        # This is trickier - print(expr,) would be Python 3, but print expr, is Python 2
+        if re.search(r"\bprint\s+(?!\()\S+\s*,\s*(?:$|#)", line):
+            return True
+        
+        # Pattern 4: print with variable/identifier without parentheses and without string
+        # e.g., "print x" or "print obj.attr"
+        # But not "print(x)" or "print = ..."
+        match = re.match(r"^(\s*)print\s+(?!\(|=)(\w+|\w+\.\w+|\w+\[\w+\])", line)
+        if match:
+            return True
+        
+        return False

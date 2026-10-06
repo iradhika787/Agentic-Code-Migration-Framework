@@ -35,12 +35,42 @@ class MigrationAgent:
 
     def _apply_rule_based_migration(self, source_code: str) -> str:
         migrated_lines = []
-        for line in source_code.splitlines():
+        lines = source_code.splitlines()
+        index = 0
+        while index < len(lines):
+            metaclass_line = self._migrate_metaclass_block(lines, index)
+            if metaclass_line is not None:
+                migrated_lines.append(metaclass_line)
+                index += 2
+                continue
+
+            line = lines[index]
             migrated_lines.append(self._migrate_line(line))
+            index += 1
         return "\n".join(migrated_lines)
+
+    def _migrate_metaclass_block(self, lines: list[str], index: int) -> str | None:
+        if index + 1 >= len(lines):
+            return None
+
+        class_match = re.match(
+            r"^(\s*)class\s+([A-Za-z_][A-Za-z0-9_]*)(?:\(object\))?:\s*$",
+            lines[index],
+        )
+        meta_match = re.match(
+            r"^\s+__metaclass__\s*=\s*([A-Za-z_][A-Za-z0-9_]*)\s*$",
+            lines[index + 1],
+        )
+        if not class_match or not meta_match:
+            return None
+
+        indent, class_name = class_match.groups()
+        metaclass_name = meta_match.group(1)
+        return f"{indent}class {class_name}(metaclass={metaclass_name}):"
 
     def _migrate_line(self, line: str) -> str:
         line = self._migrate_imports(line)
+        line = self._migrate_strings_and_classes(line)
         line = self._migrate_has_key(line)
         line = re.sub(r"\bexcept\s+(.+?),\s*([A-Za-z_][A-Za-z0-9_]*)\s*:", r"except \1 as \2:", line)
         line = re.sub(r"\braise\s+([A-Za-z_][A-Za-z0-9_\.]*)\s*,\s*(.+)$", r"raise \1(\2)", line)
@@ -56,23 +86,48 @@ class MigrationAgent:
         line = line.replace("<>", "!=")
         line = re.sub(r"(?<![A-Za-z0-9_])u([\"'])", r"\1", line)
         line = re.sub(r"`([^`]+)`", r"repr(\1)", line)
+        line = self._migrate_division(line)
         line = self._migrate_iterator_assignment(line)
         line = self._migrate_print(line)
 
         return line
 
     def _migrate_print(self, line: str) -> str:
+        """
+        Migrate Python 2 print statements to Python 3 print() function.
+        Handles:
+        - print >> file, expr
+        - print expr  (with or without trailing comma)
+        - print "string", var, ...
+        """
+        # First check if this is even a print statement and not an assignment or function call
+        if not re.search(r"\bprint\b", line):
+            return line
+        
+        # If it's "print(" or "print =", it's not a Python 2 print statement
+        if re.search(r"\bprint\s*[\(=]", line):
+            return line
+        
+        # Pattern 1: print >> file, expr  (print with redirect)
         redirect_match = re.match(r"^(\s*)print\s*>>\s*([^,]+),\s*(.*)$", line)
         if redirect_match:
             indent, target, expression = redirect_match.groups()
             return f"{indent}print({expression}, file={target.strip()})"
 
-        print_match = re.match(r"^(\s*)print\s+(?!\()(.*)$", line)
-        if print_match and not print_match.group(2).lstrip().startswith(">>"):
+        # Pattern 2: General print statement (anything after print that's not parenthesis)
+        # Match: "print" + whitespace + anything else until end of line or comment
+        print_match = re.match(r"^(\s*)print\s+(?!\(|=)(.*?)(?:\s*#|$)", line)
+        if print_match:
             indent, expression = print_match.groups()
             expression = expression.rstrip()
+            
+            if not expression:
+                return line
+            
+            # Handle trailing comma (print expr,) -> print(expr, end='')
             if expression.endswith(","):
-                return f'{indent}print({expression[:-1].rstrip()}, end=" ")'
+                return f"{indent}print({expression[:-1].rstrip()}, end=' ')"
+            
             return f"{indent}print({expression})"
 
         return line
@@ -102,6 +157,18 @@ class MigrationAgent:
         line = re.sub(r"\bfrom\s+Queue\s+import\b", "from queue import", line)
         line = re.sub(r"\bQueue\.", "queue.", line)
 
+        line = re.sub(r"^(\s*)import\s+urllib2\b", r"\1import urllib.request", line)
+        line = re.sub(r"\bfrom\s+urllib2\s+import\b", "from urllib.request import", line)
+        line = re.sub(r"\bfrom\s+urllib\s+import\s+urlencode\b", "from urllib.parse import urlencode", line)
+        line = re.sub(r"\burllib2\.", "urllib.request.", line)
+
+        line = re.sub(
+            r"\bfrom\s+django\.utils\.encoding\s+import\s+smart_unicode\b",
+            "from django.utils.encoding import smart_str",
+            line,
+        )
+        line = re.sub(r"\bSafeConfigParser\b", "ConfigParser", line)
+
         line = re.sub(r"\bfrom\s+cStringIO\s+import\s+StringIO\b", "from io import StringIO", line)
         line = re.sub(r"\bfrom\s+StringIO\s+import\s+StringIO\b", "from io import StringIO", line)
         line = re.sub(r"^(\s*)import\s+cStringIO\b", r"\1import io", line)
@@ -111,11 +178,46 @@ class MigrationAgent:
 
         return line
 
+    def _migrate_strings_and_classes(self, line: str) -> str:
+        line = re.sub(r"^(\s*class\s+[A-Za-z_][A-Za-z0-9_]*)\(object\)(\s*:)", r"\1\2", line)
+        line = re.sub(r"(\b[A-Za-z_][A-Za-z0-9_\.]*\.text)\.encode\(['\"]utf-8['\"]\)", r"\1", line)
+        line = re.sub(r"(['\"][^'\"]*['\"])\.decode\(['\"]utf-8['\"]\)", r"\1", line)
+        line = re.sub(r"=\s*'((?:\\x[0-9a-fA-F]{2})+)'", r"= b'\1'", line)
+        line = re.sub(
+            r"^(\s*[A-Za-z_][A-Za-z0-9_]*\s*=\s*)dict\(\(([^,]+),\s*([^)]+)\)\s+for\s+(.+)\)$",
+            r"\1{\2: \3 for \4}",
+            line,
+        )
+        return line
+
+    def _migrate_division(self, line: str) -> str:
+        """
+        Convert Python 2 division to Python 3.
+        In Python 2: 2 / 3 = 0 (integer division)
+        In Python 3: 2 / 3 = 0.666... (float division), 2 // 3 = 0 (integer division)
+        
+        For integer literals divided by integer literals, convert / to //.
+        This is conservative - we only convert when both operands are clearly integers.
+        """
+        # Pattern: integer / integer (e.g., 2 / 3, 10/5)
+        # This handles both "2/3" and "2 / 3" formats
+        line = re.sub(
+            r"(?<![A-Za-z0-9_\.])(\d+)\s*/\s*(\d+)(?![A-Za-z0-9_\.])",
+            r"\1 // \2",
+            line
+        )
+        return line
+
     def _migrate_iterator_assignment(self, line: str) -> str:
         match = re.match(r"^(\s*[A-Za-z_][A-Za-z0-9_]*\s*=\s*)(map|filter|zip)\((.*)\)\s*$", line)
         if match:
             prefix, func, args = match.groups()
             return f"{prefix}list({func}({args}))"
+
+        expression_match = re.match(r"^(\s*)(map|filter|zip)\((.*)\)\s*$", line)
+        if expression_match:
+            indent, func, args = expression_match.groups()
+            return f"{indent}list({func}({args}))"
 
         return line
 

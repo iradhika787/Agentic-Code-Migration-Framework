@@ -61,22 +61,22 @@ process([1, 2, 3])'''
 
         def generate(prompt, **kwargs):
             provider.prompts.append(prompt)
-            return "```python\nprint(9 // 4)\n```"
+            return "```python\nprint('ok')\n```"
 
         provider.generate = generate
         plugin = Python2ToPython3Plugin(migrator=MigrationAgent(provider=provider))
 
-        result = plugin.run_pipeline("print 9 / 4", expected_output="2")
+        result = plugin.run_pipeline("import md5\nprint 'ok'", expected_output="ok")
 
         self.assertTrue(result["success"])
         self.assertEqual(result["attempts"], 2)
-        self.assertEqual(result["verification_report"]["actual_output"], "2")
+        self.assertEqual(result["verification_report"]["actual_output"], "ok")
         self.assertIn("AI fallback", "\n".join(result["execution_log"]))
-        self.assertIn("Failed check: output_matches", provider.prompts[0])
+        self.assertIn("No module named", provider.prompts[0])
         self.assertEqual(result["iteration_metrics"]["iterations_to_convergence"], 2)
         self.assertEqual(result["iteration_metrics"]["rule_based_attempts"], 1)
         self.assertEqual(result["iteration_metrics"]["ai_fallback_attempts"], 1)
-        self.assertEqual(result["iteration_history"][0]["failed_checks"], ["output_matches"])
+        self.assertEqual(result["iteration_history"][0]["failed_checks"], ["runs"])
 
     def test_rule_based_migration_handles_more_python2_patterns(self):
         source = '''import cPickle
@@ -114,6 +114,53 @@ print(repr(items))
 print(type("x") == str)
 print(open("sample.txt").read())
 print(1 != 2)'''
+        self.assertEqual(result, expected)
+
+    def test_rule_based_migration_handles_dataset_driven_patterns(self):
+        source = '''import urllib2
+from django.utils.encoding import smart_unicode
+
+class MyClass(object):
+    pass
+
+payload = '\\x00\\x01\\x02'
+body = response.text.encode('utf-8')
+s = 'text'.decode('utf-8')
+d = dict((k, v) for k, v in items)
+values = zip(list1, list2)
+from urllib2 import urlopen
+from urllib import urlencode
+from configparser import SafeConfigParser'''
+        agent = MigrationAgent()
+
+        result = agent.migrate(source, [])
+
+        expected = '''import urllib.request
+from django.utils.encoding import smart_str
+
+class MyClass:
+    pass
+
+payload = b'\\x00\\x01\\x02'
+body = response.text
+s = 'text'
+d = {k: v for k, v in items}
+values = list(zip(list1, list2))
+from urllib.request import urlopen
+from urllib.parse import urlencode
+from configparser import ConfigParser'''
+        self.assertEqual(result, expected)
+
+    def test_rule_based_migration_handles_simple_metaclass_block(self):
+        source = '''class MyClass:
+    __metaclass__ = Meta
+    pass'''
+        agent = MigrationAgent()
+
+        result = agent.migrate(source, [])
+
+        expected = '''class MyClass(metaclass=Meta):
+    pass'''
         self.assertEqual(result, expected)
 
 

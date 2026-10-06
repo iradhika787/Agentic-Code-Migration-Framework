@@ -1,0 +1,1185 @@
+{
+  "metadata": {
+    "version": "1.0",
+    "created": "2026-08-31T13:16:05.960573",
+    "total_examples": 64,
+    "by_category": {
+      "syntax": 19,
+      "method_removal": 2,
+      "method_change": 6,
+      "builtin_change": 9,
+      "string": 6,
+      "semantics": 8,
+      "import": 6,
+      "compatible": 8
+    },
+    "by_difficulty": {
+      "easy": 38,
+      "medium": 19,
+      "hard": 7
+    },
+    "by_source": {
+      "lib2to3": 23,
+      "synthetic": 8,
+      "github_django": 2,
+      "github_flask": 1,
+      "github_requests": 1,
+      "stackoverflow": 23,
+      "real_world": 6
+    }
+  },
+  "examples": [
+    {
+      "id": "lib2to3_001",
+      "python2_code": "print 'hello'",
+      "python3_code": "print('hello')",
+      "pattern_type": "print_statement",
+      "category": "syntax",
+      "difficulty": "easy",
+      "confidence": 1.0,
+      "source": "lib2to3",
+      "tags": [
+        "print",
+        "syntax",
+        "statement"
+      ],
+      "explanation": "Python 3 requires parentheses for print()",
+      "language": "python",
+      "version_added": "1.0"
+    },
+    {
+      "id": "lib2to3_002",
+      "python2_code": "print x, y",
+      "python3_code": "print(x, y)",
+      "pattern_type": "print_statement",
+      "category": "syntax",
+      "difficulty": "easy",
+      "confidence": 1.0,
+      "source": "lib2to3",
+      "tags": [
+        "print",
+        "syntax",
+        "multiple_args"
+      ],
+      "explanation": "Multiple arguments to print() require parentheses",
+      "language": "python",
+      "version_added": "1.0"
+    },
+    {
+      "id": "lib2to3_003",
+      "python2_code": "print >> f, 'hello'",
+      "python3_code": "print('hello', file=f)",
+      "pattern_type": "print_redirect",
+      "category": "syntax",
+      "difficulty": "medium",
+      "confidence": 1.0,
+      "source": "lib2to3",
+      "tags": [
+        "print",
+        "file",
+        "redirect"
+      ],
+      "explanation": "Print redirection uses file= keyword argument in Python 3",
+      "language": "python",
+      "version_added": "1.0"
+    },
+    {
+      "id": "lib2to3_004",
+      "python2_code": "print x,",
+      "python3_code": "print(x, end=' ')",
+      "pattern_type": "print_statement",
+      "category": "syntax",
+      "difficulty": "easy",
+      "confidence": 1.0,
+      "source": "lib2to3",
+      "tags": [
+        "print",
+        "end",
+        "trailing_comma"
+      ],
+      "explanation": "Trailing comma in print statement uses end= in Python 3",
+      "language": "python",
+      "version_added": "1.0"
+    },
+    {
+      "id": "lib2to3_005",
+      "python2_code": "d.has_key('x')",
+      "python3_code": "'x' in d",
+      "pattern_type": "dict_has_key",
+      "category": "method_removal",
+      "difficulty": "easy",
+      "confidence": 1.0,
+      "source": "lib2to3",
+      "tags": [
+        "dictionary",
+        "has_key",
+        "method"
+      ],
+      "explanation": "has_key() removed in Python 3, use 'in' operator",
+      "language": "python",
+      "version_added": "1.0"
+    },
+    {
+      "id": "lib2to3_006",
+      "python2_code": "d.iteritems()",
+      "python3_code": "d.items()",
+      "pattern_type": "dict_iterator",
+      "category": "method_change",
+      "difficulty": "easy",
+      "confidence": 1.0,
+      "source": "lib2to3",
+      "tags": [
+        "dictionary",
+        "iteritems",
+        "iterator"
+      ],
+      "explanation": "iteritems() renamed to items() in Python 3",
+      "language": "python",
+      "version_added": "1.0"
+    },
+    {
+      "id": "lib2to3_007",
+      "python2_code": "d.iterkeys()",
+      "python3_code": "d.keys()",
+      "pattern_type": "dict_iterator",
+      "category": "method_change",
+      "difficulty": "easy",
+      "confidence": 1.0,
+      "source": "lib2to3",
+      "tags": [
+        "dictionary",
+        "iterkeys",
+        "iterator"
+      ],
+      "explanation": "iterkeys() renamed to keys() in Python 3",
+      "language": "python",
+      "version_added": "1.0"
+    },
+    {
+      "id": "lib2to3_008",
+      "python2_code": "d.itervalues()",
+      "python3_code": "d.values()",
+      "pattern_type": "dict_iterator",
+      "category": "method_change",
+      "difficulty": "easy",
+      "confidence": 1.0,
+      "source": "lib2to3",
+      "tags": [
+        "dictionary",
+        "itervalues",
+        "iterator"
+      ],
+      "explanation": "itervalues() renamed to values() in Python 3",
+      "language": "python",
+      "version_added": "1.0"
+    },
+    {
+      "id": "lib2to3_009",
+      "python2_code": "except Exception, e:",
+      "python3_code": "except Exception as e:",
+      "pattern_type": "except_as",
+      "category": "syntax",
+      "difficulty": "easy",
+      "confidence": 1.0,
+      "source": "lib2to3",
+      "tags": [
+        "exception",
+        "except",
+        "as"
+      ],
+      "explanation": "Exception syntax changed from comma to 'as' in Python 3",
+      "language": "python",
+      "version_added": "1.0"
+    },
+    {
+      "id": "lib2to3_010",
+      "python2_code": "raise ValueError, 'message'",
+      "python3_code": "raise ValueError('message')",
+      "pattern_type": "raise_syntax",
+      "category": "syntax",
+      "difficulty": "medium",
+      "confidence": 1.0,
+      "source": "lib2to3",
+      "tags": [
+        "exception",
+        "raise",
+        "syntax"
+      ],
+      "explanation": "Raise syntax changed from comma to function call in Python 3",
+      "language": "python",
+      "version_added": "1.0"
+    },
+    {
+      "id": "lib2to3_011",
+      "python2_code": "xrange(10)",
+      "python3_code": "range(10)",
+      "pattern_type": "builtin_renamed",
+      "category": "builtin_change",
+      "difficulty": "easy",
+      "confidence": 1.0,
+      "source": "lib2to3",
+      "tags": [
+        "xrange",
+        "range",
+        "builtin"
+      ],
+      "explanation": "xrange() removed, range() returns iterator in Python 3",
+      "language": "python",
+      "version_added": "1.0"
+    },
+    {
+      "id": "lib2to3_012",
+      "python2_code": "raw_input('prompt')",
+      "python3_code": "input('prompt')",
+      "pattern_type": "builtin_renamed",
+      "category": "builtin_change",
+      "difficulty": "easy",
+      "confidence": 1.0,
+      "source": "lib2to3",
+      "tags": [
+        "raw_input",
+        "input",
+        "builtin"
+      ],
+      "explanation": "raw_input() renamed to input() in Python 3",
+      "language": "python",
+      "version_added": "1.0"
+    },
+    {
+      "id": "lib2to3_013",
+      "python2_code": "unicode('string')",
+      "python3_code": "str('string')",
+      "pattern_type": "builtin_renamed",
+      "category": "builtin_change",
+      "difficulty": "easy",
+      "confidence": 1.0,
+      "source": "lib2to3",
+      "tags": [
+        "unicode",
+        "str",
+        "builtin"
+      ],
+      "explanation": "unicode() removed, str is unicode in Python 3",
+      "language": "python",
+      "version_added": "1.0"
+    },
+    {
+      "id": "lib2to3_014",
+      "python2_code": "long(123)",
+      "python3_code": "int(123)",
+      "pattern_type": "builtin_renamed",
+      "category": "builtin_change",
+      "difficulty": "easy",
+      "confidence": 1.0,
+      "source": "lib2to3",
+      "tags": [
+        "long",
+        "int",
+        "builtin"
+      ],
+      "explanation": "long removed, int handles arbitrary precision in Python 3",
+      "language": "python",
+      "version_added": "1.0"
+    },
+    {
+      "id": "lib2to3_015",
+      "python2_code": "file('name').read()",
+      "python3_code": "open('name').read()",
+      "pattern_type": "builtin_renamed",
+      "category": "builtin_change",
+      "difficulty": "easy",
+      "confidence": 1.0,
+      "source": "lib2to3",
+      "tags": [
+        "file",
+        "open",
+        "builtin"
+      ],
+      "explanation": "file() removed, use open() in Python 3",
+      "language": "python",
+      "version_added": "1.0"
+    },
+    {
+      "id": "lib2to3_016",
+      "python2_code": "u'string'",
+      "python3_code": "'string'",
+      "pattern_type": "unicode_literal",
+      "category": "string",
+      "difficulty": "easy",
+      "confidence": 1.0,
+      "source": "lib2to3",
+      "tags": [
+        "unicode",
+        "string",
+        "literal"
+      ],
+      "explanation": "u prefix not needed, all strings are unicode in Python 3",
+      "language": "python",
+      "version_added": "1.0"
+    },
+    {
+      "id": "lib2to3_017",
+      "python2_code": "basestring",
+      "python3_code": "str",
+      "pattern_type": "type_change",
+      "category": "builtin_change",
+      "difficulty": "easy",
+      "confidence": 1.0,
+      "source": "lib2to3",
+      "tags": [
+        "basestring",
+        "str",
+        "type"
+      ],
+      "explanation": "basestring removed, use str in Python 3",
+      "language": "python",
+      "version_added": "1.0"
+    },
+    {
+      "id": "lib2to3_018",
+      "python2_code": "x <> y",
+      "python3_code": "x != y",
+      "pattern_type": "operator_change",
+      "category": "syntax",
+      "difficulty": "easy",
+      "confidence": 1.0,
+      "source": "lib2to3",
+      "tags": [
+        "operator",
+        "comparison",
+        "syntax"
+      ],
+      "explanation": "<> operator removed, use != in Python 3",
+      "language": "python",
+      "version_added": "1.0"
+    },
+    {
+      "id": "lib2to3_019",
+      "python2_code": "`x`",
+      "python3_code": "repr(x)",
+      "pattern_type": "backtick_repr",
+      "category": "syntax",
+      "difficulty": "easy",
+      "confidence": 1.0,
+      "source": "lib2to3",
+      "tags": [
+        "backtick",
+        "repr",
+        "syntax"
+      ],
+      "explanation": "Backticks removed, use repr() function in Python 3",
+      "language": "python",
+      "version_added": "1.0"
+    },
+    {
+      "id": "lib2to3_020",
+      "python2_code": "result = 5 / 2  # returns 2",
+      "python3_code": "result = 5 // 2  # returns 2 (floor division)",
+      "pattern_type": "division_semantics",
+      "category": "semantics",
+      "difficulty": "hard",
+      "confidence": 0.8,
+      "source": "lib2to3",
+      "tags": [
+        "division",
+        "semantics",
+        "arithmetic"
+      ],
+      "explanation": "Python 2 / does floor division, Python 3 / does true division",
+      "language": "python",
+      "version_added": "1.0"
+    },
+    {
+      "id": "lib2to3_021",
+      "python2_code": "map(func, list)",
+      "python3_code": "list(map(func, list))",
+      "pattern_type": "iterator_return",
+      "category": "semantics",
+      "difficulty": "medium",
+      "confidence": 0.9,
+      "source": "lib2to3",
+      "tags": [
+        "map",
+        "iterator",
+        "semantics"
+      ],
+      "explanation": "map() returns iterator in Python 3, not list",
+      "language": "python",
+      "version_added": "1.0"
+    },
+    {
+      "id": "lib2to3_022",
+      "python2_code": "filter(func, list)",
+      "python3_code": "list(filter(func, list))",
+      "pattern_type": "iterator_return",
+      "category": "semantics",
+      "difficulty": "medium",
+      "confidence": 0.9,
+      "source": "lib2to3",
+      "tags": [
+        "filter",
+        "iterator",
+        "semantics"
+      ],
+      "explanation": "filter() returns iterator in Python 3, not list",
+      "language": "python",
+      "version_added": "1.0"
+    },
+    {
+      "id": "lib2to3_023",
+      "python2_code": "zip(a, b)",
+      "python3_code": "list(zip(a, b))",
+      "pattern_type": "iterator_return",
+      "category": "semantics",
+      "difficulty": "medium",
+      "confidence": 0.9,
+      "source": "lib2to3",
+      "tags": [
+        "zip",
+        "iterator",
+        "semantics"
+      ],
+      "explanation": "zip() returns iterator in Python 3, not list",
+      "language": "python",
+      "version_added": "1.0"
+    },
+    {
+      "id": "syn_001",
+      "python2_code": "print 'x:', x, 'y:', y",
+      "python3_code": "print('x:', x, 'y:', y)",
+      "pattern_type": "print_statement",
+      "category": "syntax",
+      "difficulty": "easy",
+      "confidence": 1.0,
+      "source": "synthetic",
+      "tags": [
+        "print",
+        "multiple",
+        "complex"
+      ],
+      "explanation": "Complex print with multiple arguments",
+      "language": "python",
+      "version_added": "1.0"
+    },
+    {
+      "id": "syn_002",
+      "python2_code": "print >> sys.stderr, 'error'",
+      "python3_code": "print('error', file=sys.stderr)",
+      "pattern_type": "print_redirect",
+      "category": "syntax",
+      "difficulty": "medium",
+      "confidence": 1.0,
+      "source": "synthetic",
+      "tags": [
+        "print",
+        "stderr",
+        "redirect"
+      ],
+      "explanation": "Print to stderr using file parameter",
+      "language": "python",
+      "version_added": "1.0"
+    },
+    {
+      "id": "syn_003",
+      "python2_code": "import urllib2",
+      "python3_code": "import urllib.request",
+      "pattern_type": "import_change",
+      "category": "import",
+      "difficulty": "medium",
+      "confidence": 0.95,
+      "source": "synthetic",
+      "tags": [
+        "import",
+        "urllib",
+        "reorganization"
+      ],
+      "explanation": "urllib reorganized in Python 3",
+      "language": "python",
+      "version_added": "1.0"
+    },
+    {
+      "id": "syn_004",
+      "python2_code": "from ConfigParser import ConfigParser",
+      "python3_code": "from configparser import ConfigParser",
+      "pattern_type": "import_change",
+      "category": "import",
+      "difficulty": "medium",
+      "confidence": 0.95,
+      "source": "synthetic",
+      "tags": [
+        "import",
+        "ConfigParser",
+        "rename"
+      ],
+      "explanation": "ConfigParser renamed to configparser (lowercase)",
+      "language": "python",
+      "version_added": "1.0"
+    },
+    {
+      "id": "syn_005",
+      "python2_code": "try:\n    x = 1\nexcept Exception, e:\n    print e",
+      "python3_code": "try:\n    x = 1\nexcept Exception as e:\n    print(e)",
+      "pattern_type": "except_as",
+      "category": "syntax",
+      "difficulty": "medium",
+      "confidence": 1.0,
+      "source": "synthetic",
+      "tags": [
+        "exception",
+        "except",
+        "try"
+      ],
+      "explanation": "Exception handling with as syntax and print function",
+      "language": "python",
+      "version_added": "1.0"
+    },
+    {
+      "id": "syn_006",
+      "python2_code": "d = dict((k, v) for k, v in items)",
+      "python3_code": "d = {k: v for k, v in items}",
+      "pattern_type": "dict_comprehension",
+      "category": "syntax",
+      "difficulty": "medium",
+      "confidence": 0.9,
+      "source": "synthetic",
+      "tags": [
+        "comprehension",
+        "dict",
+        "syntax"
+      ],
+      "explanation": "Dict comprehension syntax improvement",
+      "language": "python",
+      "version_added": "1.0"
+    },
+    {
+      "id": "syn_007",
+      "python2_code": "s = 'text'.decode('utf-8')",
+      "python3_code": "s = 'text'",
+      "pattern_type": "string_encoding",
+      "category": "string",
+      "difficulty": "hard",
+      "confidence": 0.7,
+      "source": "synthetic",
+      "tags": [
+        "string",
+        "encoding",
+        "decode"
+      ],
+      "explanation": "String encoding/decoding behavior changes",
+      "language": "python",
+      "version_added": "1.0"
+    },
+    {
+      "id": "syn_008",
+      "python2_code": "class MyClass(object):\n    pass",
+      "python3_code": "class MyClass:\n    pass",
+      "pattern_type": "class_definition",
+      "category": "syntax",
+      "difficulty": "easy",
+      "confidence": 1.0,
+      "source": "synthetic",
+      "tags": [
+        "class",
+        "object",
+        "inheritance"
+      ],
+      "explanation": "Explicit object inheritance not needed in Python 3",
+      "language": "python",
+      "version_added": "1.0"
+    },
+    {
+      "id": "gh_django_001",
+      "python2_code": "from django.utils.encoding import smart_unicode",
+      "python3_code": "from django.utils.encoding import smart_str",
+      "pattern_type": "import_change",
+      "category": "import",
+      "difficulty": "medium",
+      "confidence": 0.95,
+      "source": "github_django",
+      "tags": [
+        "django",
+        "import",
+        "rename"
+      ],
+      "explanation": "Django smart_unicode renamed to smart_str",
+      "language": "python",
+      "version_added": "1.0"
+    },
+    {
+      "id": "gh_django_002",
+      "python2_code": "for key, value in dict.iteritems():\n    pass",
+      "python3_code": "for key, value in dict.items():\n    pass",
+      "pattern_type": "dict_iterator",
+      "category": "method_change",
+      "difficulty": "easy",
+      "confidence": 1.0,
+      "source": "github_django",
+      "tags": [
+        "django",
+        "dict",
+        "iteration"
+      ],
+      "explanation": "Django iteritems() to items()",
+      "language": "python",
+      "version_added": "1.0"
+    },
+    {
+      "id": "gh_flask_001",
+      "python2_code": "from werkzeug.security import check_password_hash",
+      "python3_code": "from werkzeug.security import check_password_hash",
+      "pattern_type": "no_change",
+      "category": "compatible",
+      "difficulty": "easy",
+      "confidence": 1.0,
+      "source": "github_flask",
+      "tags": [
+        "flask",
+        "compatible"
+      ],
+      "explanation": "Some imports are compatible across versions",
+      "language": "python",
+      "version_added": "1.0"
+    },
+    {
+      "id": "gh_requests_001",
+      "python2_code": "response.text.encode('utf-8')",
+      "python3_code": "response.text",
+      "pattern_type": "string_encoding",
+      "category": "string",
+      "difficulty": "hard",
+      "confidence": 0.8,
+      "source": "github_requests",
+      "tags": [
+        "requests",
+        "string",
+        "encoding"
+      ],
+      "explanation": "String handling in HTTP responses",
+      "language": "python",
+      "version_added": "1.0"
+    },
+    {
+      "id": "so_print_001",
+      "python2_code": "print 'Hello %s' % name",
+      "python3_code": "print('Hello %s' % name)",
+      "pattern_type": "print_statement",
+      "category": "syntax",
+      "difficulty": "easy",
+      "confidence": 1.0,
+      "source": "stackoverflow",
+      "tags": [
+        "print",
+        "string_formatting",
+        "common"
+      ],
+      "explanation": "Print with string formatting",
+      "language": "python",
+      "version_added": "1.0"
+    },
+    {
+      "id": "so_print_002",
+      "python2_code": "print variable",
+      "python3_code": "print(variable)",
+      "pattern_type": "print_statement",
+      "category": "syntax",
+      "difficulty": "easy",
+      "confidence": 1.0,
+      "source": "stackoverflow",
+      "tags": [
+        "print",
+        "simple",
+        "very_common"
+      ],
+      "explanation": "Most common migration: simple print without parentheses",
+      "language": "python",
+      "version_added": "1.0"
+    },
+    {
+      "id": "so_div_001",
+      "python2_code": "total = 10 / 3  # expects 3",
+      "python3_code": "total = 10 // 3  # still 3",
+      "pattern_type": "division_semantics",
+      "category": "semantics",
+      "difficulty": "hard",
+      "confidence": 0.85,
+      "source": "stackoverflow",
+      "tags": [
+        "division",
+        "arithmetic",
+        "subtle_bug"
+      ],
+      "explanation": "Division semantics change is subtle and often missed",
+      "language": "python",
+      "version_added": "1.0"
+    },
+    {
+      "id": "so_div_002",
+      "python2_code": "result = 1.0 / 2  # Python 2 & 3 both 0.5",
+      "python3_code": "result = 1.0 / 2",
+      "pattern_type": "division_semantics",
+      "category": "semantics",
+      "difficulty": "medium",
+      "confidence": 1.0,
+      "source": "stackoverflow",
+      "tags": [
+        "division",
+        "float",
+        "compatible"
+      ],
+      "explanation": "Float division works in both versions",
+      "language": "python",
+      "version_added": "1.0"
+    },
+    {
+      "id": "so_unicode_001",
+      "python2_code": "s = 'hello'\nprint type(s)  # <type 'str'>",
+      "python3_code": "s = 'hello'\nprint(type(s))  # <class 'str'>",
+      "pattern_type": "string_type",
+      "category": "string",
+      "difficulty": "medium",
+      "confidence": 0.9,
+      "source": "stackoverflow",
+      "tags": [
+        "string",
+        "unicode",
+        "type",
+        "semantic"
+      ],
+      "explanation": "In Python 2 str is bytes, in Python 3 str is unicode",
+      "language": "python",
+      "version_added": "1.0"
+    },
+    {
+      "id": "so_unicode_002",
+      "python2_code": "s.decode('utf-8')",
+      "python3_code": "s.encode('latin-1').decode('utf-8')",
+      "pattern_type": "string_encoding",
+      "category": "string",
+      "difficulty": "hard",
+      "confidence": 0.7,
+      "source": "stackoverflow",
+      "tags": [
+        "encoding",
+        "decode",
+        "complex"
+      ],
+      "explanation": "String encoding/decoding behavior differs significantly",
+      "language": "python",
+      "version_added": "1.0"
+    },
+    {
+      "id": "so_unicode_003",
+      "python2_code": "if isinstance(x, basestring):",
+      "python3_code": "if isinstance(x, str):",
+      "pattern_type": "type_check",
+      "category": "builtin_change",
+      "difficulty": "easy",
+      "confidence": 1.0,
+      "source": "stackoverflow",
+      "tags": [
+        "isinstance",
+        "basestring",
+        "type_check"
+      ],
+      "explanation": "basestring removed, use str for string type checking",
+      "language": "python",
+      "version_added": "1.0"
+    },
+    {
+      "id": "so_iter_001",
+      "python2_code": "for i in xrange(1000000):",
+      "python3_code": "for i in range(1000000):",
+      "pattern_type": "builtin_renamed",
+      "category": "builtin_change",
+      "difficulty": "easy",
+      "confidence": 1.0,
+      "source": "stackoverflow",
+      "tags": [
+        "xrange",
+        "range",
+        "iteration",
+        "memory"
+      ],
+      "explanation": "xrange() removed, range() is lazy in Python 3",
+      "language": "python",
+      "version_added": "1.0"
+    },
+    {
+      "id": "so_iter_002",
+      "python2_code": "items = map(func, list1, list2)",
+      "python3_code": "items = list(map(func, list1, list2))",
+      "pattern_type": "iterator_return",
+      "category": "semantics",
+      "difficulty": "medium",
+      "confidence": 0.95,
+      "source": "stackoverflow",
+      "tags": [
+        "map",
+        "multiple_args",
+        "iterator"
+      ],
+      "explanation": "map() returns iterator, need list() for list result",
+      "language": "python",
+      "version_added": "1.0"
+    },
+    {
+      "id": "so_iter_003",
+      "python2_code": "for i in dict.keys():",
+      "python3_code": "for i in dict.keys():",
+      "pattern_type": "dict_keys",
+      "category": "compatible",
+      "difficulty": "easy",
+      "confidence": 1.0,
+      "source": "stackoverflow",
+      "tags": [
+        "dict",
+        "keys",
+        "compatible"
+      ],
+      "explanation": "dict.keys() works in both versions (but returns view in Python 3)",
+      "language": "python",
+      "version_added": "1.0"
+    },
+    {
+      "id": "so_except_001",
+      "python2_code": "except (IOError, OSError), e:",
+      "python3_code": "except (IOError, OSError) as e:",
+      "pattern_type": "except_as",
+      "category": "syntax",
+      "difficulty": "easy",
+      "confidence": 1.0,
+      "source": "stackoverflow",
+      "tags": [
+        "exception",
+        "multiple",
+        "as"
+      ],
+      "explanation": "Multiple exception handling with 'as' syntax",
+      "language": "python",
+      "version_added": "1.0"
+    },
+    {
+      "id": "so_except_002",
+      "python2_code": "raise IOError, 'message'",
+      "python3_code": "raise IOError('message')",
+      "pattern_type": "raise_syntax",
+      "category": "syntax",
+      "difficulty": "easy",
+      "confidence": 1.0,
+      "source": "stackoverflow",
+      "tags": [
+        "raise",
+        "exception",
+        "constructor"
+      ],
+      "explanation": "Raise with exception instance (not string)",
+      "language": "python",
+      "version_added": "1.0"
+    },
+    {
+      "id": "so_except_003",
+      "python2_code": "raise ValueError()",
+      "python3_code": "raise ValueError()",
+      "pattern_type": "raise_call",
+      "category": "compatible",
+      "difficulty": "easy",
+      "confidence": 1.0,
+      "source": "stackoverflow",
+      "tags": [
+        "raise",
+        "modern",
+        "compatible"
+      ],
+      "explanation": "Modern raise syntax compatible in both versions",
+      "language": "python",
+      "version_added": "1.0"
+    },
+    {
+      "id": "so_dict_001",
+      "python2_code": "for k in d.iterkeys():",
+      "python3_code": "for k in d.keys():",
+      "pattern_type": "dict_iterator",
+      "category": "method_change",
+      "difficulty": "easy",
+      "confidence": 1.0,
+      "source": "stackoverflow",
+      "tags": [
+        "dict",
+        "iterkeys",
+        "keys"
+      ],
+      "explanation": "iterkeys() renamed to keys()",
+      "language": "python",
+      "version_added": "1.0"
+    },
+    {
+      "id": "so_dict_002",
+      "python2_code": "for v in d.itervalues():",
+      "python3_code": "for v in d.values():",
+      "pattern_type": "dict_iterator",
+      "category": "method_change",
+      "difficulty": "easy",
+      "confidence": 1.0,
+      "source": "stackoverflow",
+      "tags": [
+        "dict",
+        "itervalues",
+        "values"
+      ],
+      "explanation": "itervalues() renamed to values()",
+      "language": "python",
+      "version_added": "1.0"
+    },
+    {
+      "id": "so_dict_003",
+      "python2_code": "if d.has_key(key):",
+      "python3_code": "if key in d:",
+      "pattern_type": "dict_has_key",
+      "category": "method_removal",
+      "difficulty": "easy",
+      "confidence": 1.0,
+      "source": "stackoverflow",
+      "tags": [
+        "dict",
+        "has_key",
+        "in"
+      ],
+      "explanation": "has_key() removed, use 'in' operator",
+      "language": "python",
+      "version_added": "1.0"
+    },
+    {
+      "id": "so_import_001",
+      "python2_code": "from urllib2 import urlopen",
+      "python3_code": "from urllib.request import urlopen",
+      "pattern_type": "import_reorganization",
+      "category": "import",
+      "difficulty": "medium",
+      "confidence": 0.95,
+      "source": "stackoverflow",
+      "tags": [
+        "urllib",
+        "import",
+        "reorganization"
+      ],
+      "explanation": "urllib reorganized in Python 3",
+      "language": "python",
+      "version_added": "1.0"
+    },
+    {
+      "id": "so_import_002",
+      "python2_code": "from urllib import urlencode",
+      "python3_code": "from urllib.parse import urlencode",
+      "pattern_type": "import_reorganization",
+      "category": "import",
+      "difficulty": "medium",
+      "confidence": 0.95,
+      "source": "stackoverflow",
+      "tags": [
+        "urllib",
+        "urlencode",
+        "import"
+      ],
+      "explanation": "urllib.parse contains URL utilities",
+      "language": "python",
+      "version_added": "1.0"
+    },
+    {
+      "id": "so_import_003",
+      "python2_code": "from ConfigParser import SafeConfigParser",
+      "python3_code": "from configparser import ConfigParser",
+      "pattern_type": "import_change",
+      "category": "import",
+      "difficulty": "medium",
+      "confidence": 0.95,
+      "source": "stackoverflow",
+      "tags": [
+        "ConfigParser",
+        "configparser",
+        "rename"
+      ],
+      "explanation": "ConfigParser module renamed to configparser",
+      "language": "python",
+      "version_added": "1.0"
+    },
+    {
+      "id": "so_meta_001",
+      "python2_code": "class MyClass(object):\n    __metaclass__ = Meta",
+      "python3_code": "class MyClass(metaclass=Meta):",
+      "pattern_type": "metaclass_syntax",
+      "category": "syntax",
+      "difficulty": "hard",
+      "confidence": 0.85,
+      "source": "stackoverflow",
+      "tags": [
+        "metaclass",
+        "syntax",
+        "advanced"
+      ],
+      "explanation": "Metaclass syntax changed in Python 3",
+      "language": "python",
+      "version_added": "1.0"
+    },
+    {
+      "id": "so_func_001",
+      "python2_code": "enumerate(d.items())",
+      "python3_code": "enumerate(d.items())",
+      "pattern_type": "compatible",
+      "category": "compatible",
+      "difficulty": "easy",
+      "confidence": 1.0,
+      "source": "stackoverflow",
+      "tags": [
+        "enumerate",
+        "compatible"
+      ],
+      "explanation": "enumerate() works with both versions",
+      "language": "python",
+      "version_added": "1.0"
+    },
+    {
+      "id": "so_func_002",
+      "python2_code": "zip(list1, list2)",
+      "python3_code": "list(zip(list1, list2))",
+      "pattern_type": "iterator_return",
+      "category": "semantics",
+      "difficulty": "medium",
+      "confidence": 0.95,
+      "source": "stackoverflow",
+      "tags": [
+        "zip",
+        "iterator",
+        "list"
+      ],
+      "explanation": "zip() returns iterator in Python 3",
+      "language": "python",
+      "version_added": "1.0"
+    },
+    {
+      "id": "so_op_002",
+      "python2_code": "if x <> y:",
+      "python3_code": "if x != y:",
+      "pattern_type": "operator_change",
+      "category": "syntax",
+      "difficulty": "easy",
+      "confidence": 1.0,
+      "source": "stackoverflow",
+      "tags": [
+        "operator",
+        "inequality",
+        "syntax"
+      ],
+      "explanation": "<> operator removed, use !=",
+      "language": "python",
+      "version_added": "1.0"
+    },
+    {
+      "id": "rw_nested_001",
+      "python2_code": "d = {k: v for k, v in zip(keys, map(int, values))}",
+      "python3_code": "d = {k: v for k, v in zip(keys, map(int, values))}",
+      "pattern_type": "compatible_complex",
+      "category": "compatible",
+      "difficulty": "medium",
+      "confidence": 1.0,
+      "source": "real_world",
+      "tags": [
+        "complex",
+        "comprehension",
+        "compatible"
+      ],
+      "explanation": "Complex but compatible pattern",
+      "language": "python",
+      "version_added": "1.0"
+    },
+    {
+      "id": "rw_file_001",
+      "python2_code": "f = file('data.txt')\ndata = f.read()",
+      "python3_code": "f = open('data.txt')\ndata = f.read()",
+      "pattern_type": "builtin_renamed",
+      "category": "builtin_change",
+      "difficulty": "easy",
+      "confidence": 1.0,
+      "source": "real_world",
+      "tags": [
+        "file",
+        "open",
+        "io"
+      ],
+      "explanation": "file() replaced by open()",
+      "language": "python",
+      "version_added": "1.0"
+    },
+    {
+      "id": "rw_print_001",
+      "python2_code": "sys.stdout.write('message')",
+      "python3_code": "sys.stdout.write('message')",
+      "pattern_type": "compatible",
+      "category": "compatible",
+      "difficulty": "easy",
+      "confidence": 1.0,
+      "source": "real_world",
+      "tags": [
+        "io",
+        "stdout",
+        "compatible"
+      ],
+      "explanation": "sys.stdout.write() compatible in both versions",
+      "language": "python",
+      "version_added": "1.0"
+    },
+    {
+      "id": "rw_bytes_001",
+      "python2_code": "data = '\\x00\\x01\\x02'",
+      "python3_code": "data = b'\\x00\\x01\\x02'",
+      "pattern_type": "bytes_literal",
+      "category": "string",
+      "difficulty": "hard",
+      "confidence": 0.75,
+      "source": "real_world",
+      "tags": [
+        "bytes",
+        "string",
+        "binary"
+      ],
+      "explanation": "Byte string literals need b prefix in Python 3",
+      "language": "python",
+      "version_added": "1.0"
+    },
+    {
+      "id": "rw_str_001",
+      "python2_code": "s.strip()",
+      "python3_code": "s.strip()",
+      "pattern_type": "compatible",
+      "category": "compatible",
+      "difficulty": "easy",
+      "confidence": 1.0,
+      "source": "real_world",
+      "tags": [
+        "string",
+        "method",
+        "compatible"
+      ],
+      "explanation": "String methods compatible across versions",
+      "language": "python",
+      "version_added": "1.0"
+    },
+    {
+      "id": "rw_dict_001",
+      "python2_code": "d.get('key', default)",
+      "python3_code": "d.get('key', default)",
+      "pattern_type": "compatible",
+      "category": "compatible",
+      "difficulty": "easy",
+      "confidence": 1.0,
+      "source": "real_world",
+      "tags": [
+        "dict",
+        "get",
+        "compatible"
+      ],
+      "explanation": "dict.get() compatible in both versions",
+      "language": "python",
+      "version_added": "1.0"
+    }
+  ]
+}
